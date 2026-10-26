@@ -1,0 +1,170 @@
+[
+{
+"slug": "calmato",
+"name": "Calmato",
+"en": "Pomodoro timer with calm soundscapes, focus sessions and gentle break alerts.",
+"tr": "Pomodoro zamanlayıcı: sakin sesler, odak seansları ve mola hatırlatmaları.",
+"color": "#D9452B"
+},
+{
+"slug": "mybudget",
+"name": "My Budget",
+"en": "See what you can safely spend today. Income, bills, goals and limits in one app.",
+"tr": "Bugün ne kadar harcayabilirsin? Gelir, gider, fatura ve hedefler tek yerde.",
+"color": "#BF5C43"
+},
+{
+"slug": "proofnest",
+"name": "ProofNest",
+"en": "Keep receipts and invoices; get reminded before warranties expire. On-device OCR",
+"tr": "Fiş ve faturaları sakla, garanti bitmeden hatırlatma al. Metin tanıma cihazda.",
+"color": "#154B4A"
+},
+{
+"slug": "subcompass",
+"name": "SubCompass",
+"en": "Track subscriptions and free trials, get alerts before renewals and save money.",
+"tr": "Abonelik ve ücretsiz denemeleri takip et, yenilemeden önce haber al, tasarruf et",
+"color": "#26286B"
+},
+{
+"slug": "tipsplitter",
+"name": "Tip Splitter",
+"en": "Calculate the tip, split the bill, round and share. Read totals from a receipt.",
+"tr": "Bahşişi hesapla, hesabı kişilere böl, yuvarla ve paylaş. Fişi fotoğraftan oku.",
+"color": "#3F1566"
+},
+{
+"slug": "inplace",
+"name": "InPlace",
+"en": "Where are your things, who borrowed them? Photos, box QR labels and reminders.",
+"tr": "Eşyaların nerede, kime ödünç verdin? Fotoğraf, kutu QR etiketi ve hatırlatma.",
+"color": "#0B5C9E"
+},
+{
+"slug": "usefirst",
+"name": "UseFirst",
+"en": "Track expiry dates in your fridge and pantry, get reminders and waste less food.",
+"tr": "Buzdolabı ve kilerdeki ürünlerin son kullanma tarihini takip et, israfı azalt.",
+"color": "#0E6B44"
+},
+{
+"slug": "sprouty",
+"name": "Sprouty",
+"en": "Watering, feeding and care reminders for your plants. Mark done in one tap.",
+"tr": "Bitkilerini sulama, gübreleme ve bakım zamanında hatırlat. Tek dokunuşla tamam.",
+"color": "#17543A"
+},
+{
+"slug": "setflow",
+"name": "SetFlow",
+"en": "Track workout sets and rest periods, save your plans and keep your flow.",
+"tr": "Antrenman setlerini ve dinlenme sürelerini takip et, planlarını kaydet.",
+"color": "#1F6FEB"
+},
+{
+"slug": "tinystep",
+"name": "TinyStep",
+"en": "Build tiny habits, check in with one tap every day and watch your streak grow.",
+"tr": "Mini alışkanlıklar kur, her gün tek dokunuşla işaretle, serini widget'ta gör.",
+"color": "#E4572B"
+},
+{
+"slug": "sippy",
+"name": "Sippy",
+"en": "Set a daily water goal, add a glass in one tap and get gentle reminders.",
+"tr": "Günlük su hedefini belirle, tek dokunuşla bardak ekle, zamanında hatırlatma al.",
+"color": "#0C8C9A"
+},
+{
+"slug": "finito",
+"name": "Finito",
+"en": "To-dos and reminders with a satisfying finish: smooth animation and tiny sounds.",
+"tr": "Yapılacaklar ve hatırlatmalar: bitirince tatmin eden animasyon ve küçük sesler.",
+"color": "#232B3E"
+},
+{
+"slug": "looklater",
+"name": "LookLater",
+"en": "Save links, text and ideas for later, and get reminded at the right time.",
+"tr": "Link, metin ve fikirleri sonraya sakla; zamanı gelince hatırlat, unutma.",
+"color": "#5A3526"
+},
+{
+"slug": "carassistant",
+"name": "Car Assistant",
+"en": "Track inspection, insurance and service dates; log fuel, costs and parking.",
+"tr": "Muayene, sigorta, kasko ve bakım tarihlerini takip et; yakıt ve gideri kaydet.",
+"color": "#2B4C7E"
+},
+{
+"slug": "rentassistant",
+"name": "Rent Assistant",
+"en": "Track rent payments, calculate rent increases and never miss a lease date.",
+"tr": "Kira ödemesi, kira artışı hesabı ve sözleşme tarihlerini takip et.",
+"color": "#8A4B2A"
+},
+{
+"slug": "fastingtimer",
+"name": "Fasting Timer",
+"en": "Intermittent fasting timer: 16:8 and custom plans, streaks, history and alerts.",
+"tr": "Aralıklı oruç zamanlayıcısı: 16:8 planı, seri, geçmiş ve hatırlatmalar.",
+"color": "#E07A1F"
+},
+{
+"slug": "nightsky",
+"name": "Night Sky Tonight",
+"en": "Which planets are up tonight? Moon phase, sky map, meteor showers and AR camera.",
+"tr": "Bu gece hangi gezegenler görünür? Ay evresi, gök haritası ve meteor yağmurları.",
+"color": "#1B1F4B"
+},
+{
+"slug": "birthdaygifts",
+"name": "Birthday Reminder & Gift Ideas",
+"en": "Never miss a birthday: reminders, gift ideas and a gift budget, all offline.",
+"tr": "Doğum günlerini unutma: hatırlatma, hediye fikirleri ve bütçe, çevrimdışı.",
+"color": "#C2185B"
+},
+{
+"slug": "medsvitamins",
+"name": "Meds & Vitamins Reminder",
+"en": "Never miss a pill or vitamin: daily checklist, refill alerts, private, offline.",
+"tr": "İlaç ve vitamin saatlerini unutma: günlük liste, stok uyarısı, çevrimdışı.",
+"color": "#2E7D6B"
+},
+{
+"slug": "petcare",
+"name": "Pet Care Log",
+"en": "Vaccines, flea treatment, weight and costs: all your pet's care in one place.",
+"tr": "Aşı, pire damlası, kilo ve harcamalar: evcil hayvanın tüm bakımı tek yerde.",
+"color": "#B5651D"
+},
+{
+"slug": "nutrientdiary",
+"name": "Nutrient Diary",
+"en": "Log meals, calories and macros with a simple food list. Offline and private.",
+"tr": "Öğünlerini, kalori ve makrolarını yaz: Türk mutfağına uygun liste, çevrimdışı.",
+"color": "#5E8C31"
+},
+{
+"slug": "captionsaver",
+"name": "Caption Saver",
+"en": "Caption templates, hashtag groups and a character counter for every platform.",
+"tr": "Açıklama şablonların, hashtag grupların ve karakter sayacı tek yerde.",
+"color": "#6A3FB5"
+},
+{
+"slug": "boardgamescorer",
+"name": "Board Game Scorer & Dice",
+"en": "Keep score for any board or card game, crown the winner, roll dice. Offline.",
+"tr": "Catan, Uno, Okey… puanları tut, kazananı gör, zar at. Çevrimdışı.",
+"color": "#8E2C2C"
+},
+{
+"slug": "guestpass",
+"name": "GuestPass",
+"en": "Share your Wi-Fi with a QR code, print a guest poster, scan and join networks.",
+"tr": "Wi-Fi şifreni QR ile paylaş, misafir afişi bas, QR okutup ağa bağlan.",
+"color": "#A31D5B"
+}
+]
