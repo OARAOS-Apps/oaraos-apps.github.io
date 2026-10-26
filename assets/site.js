@@ -96,6 +96,7 @@
       const tag = el.children[0].tagName;
       el.replaceChildren(...v.map(s => { const c = document.createElement(tag); c.textContent = s; return c; }));
     });
+    document.querySelectorAll("[data-src-tr]").forEach(img => { img.src = img.dataset[lang === "tr" ? "srcTr" : "srcEn"]; });
     document.getElementById("l-tr").setAttribute("aria-pressed", lang === "tr");
     document.getElementById("l-en").setAttribute("aria-pressed", lang === "en");
     renderApps();
