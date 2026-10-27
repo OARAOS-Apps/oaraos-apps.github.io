@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <meta name="theme-color" content="#0B5D57" />
+    <title>Sitera — İnternet yok</title>
+    <style>
+      :root { --canvas:#f4f5f7; --surface:#fff; --line:#e4e6eb; --ink:#14181f; --muted:#5b6472; --primary:#0b5d57; --primary-soft:#e8f2f1; --warning:#9a4a06; --warning-soft:#fff8f1; }
+      @media (prefers-color-scheme: dark) { :root { --canvas:#0f1318; --surface:#171c23; --line:#2a313c; --ink:#eef1f5; --muted:#9aa4b2; --primary:#5fc2b8; --primary-soft:#12302d; --warning:#f0b070; --warning-soft:#2a2013; } }
+      * { box-sizing: border-box; }
+      body { margin:0; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; background:var(--canvas); color:var(--ink); font:16px/1.5 system-ui, -apple-system, "Segoe UI", sans-serif; }
+      main { width:100%; max-width:390px; display:flex; flex-direction:column; gap:20px; }
+      .brand { display:flex; align-items:center; gap:10px; font-weight:600; }
+      .logo { width:32px; height:32px; border-radius:8px; background:var(--primary); color:#fff; display:flex; align-items:center; justify-content:center; font-weight:600; }
+      .card { background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:20px; display:flex; flex-direction:column; gap:14px; }
+      h1 { margin:0; font-size:1.25rem; }
+      .debt { border-radius:10px; background:var(--primary-soft); padding:14px 16px; }
+      .debt small { display:block; color:var(--muted); font-size:.8125rem; }
+      .debt strong { display:block; margin-top:2px; font-size:1.75rem; font-variant-numeric: tabular-nums; color:var(--primary); }
+      .note { font-size:.8125rem; color:var(--warning); background:var(--warning-soft); border-radius:10px; padding:10px 12px; margin:0; }
+      p { margin:0; }
+      .muted { color:var(--muted); font-size:.875rem; }
+      button { height:48px; border:0; border-radius:10px; background:var(--primary); color:#fff; font:inherit; font-weight:600; cursor:pointer; }
+      [hidden] { display:none; }
+    </style>
+  </head>
+  <body>
+    <main>
+      <div class="brand"><span class="logo" aria-hidden="true">S</span> Sitera</div>
+      <section class="card" aria-live="polite">
+        <h1>İnternet yok</h1>
+        <p id="last-debt" class="muted" hidden></p>
+        <div id="debt-box" class="debt" hidden>
+          <small id="debt-label">Son görülen borç</small>
+          <strong id="debt-amount"></strong>
+          <small id="debt-at"></small>
+        </div>
+        <p id="stale-note" class="note" hidden>Bu tutar yalnızca bilgi içindir; güncel borcunuz farklı olabilir. Bağlantı gelince yenilenir.</p>
+        <p id="no-debt" class="muted">Bağlantı kurulunca bilgileriniz yeniden görünecek.</p>
+        <button type="button" id="retry">Tekrar dene</button>
+      </section>
+    </main>
+    <script>
+      // Son görülen borç yalnız GÖSTERİM içindir (tarih damgalı); uygulama çıkışta bu anahtarı siler.
+      const byId = (id) => document.getElementById(id);
+      let saved = null;
+      try {
+        saved = JSON.parse(localStorage.getItem("sitera.lastDebt") || "null");
+      } catch {
+        saved = null;
+      }
+      const parts = saved?.at ? /^(-?)(\d+)(?:\.(\d+))?$/.exec(String(saved.amount)) : null;
+      if (parts) {
+        const [, minus, whole, frac = ""] = parts;
+        const credit = minus === "-";
+        const text = `${whole.replace(/\B(?=(\d{3})+(?!\d))/g, ".")},${`${frac}00`.slice(0, 2)} ₺`;
+        const date = new Date(saved.at);
+        const when = `${date.toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" })} ${date.toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}`;
+        byId("debt-label").textContent = credit ? "Son görülen avans krediniz" : "Son görülen borç";
+        byId("debt-amount").textContent = text;
+        byId("debt-at").textContent = when;
+        byId("debt-box").hidden = false;
+        byId("stale-note").hidden = false;
+        byId("no-debt").hidden = true;
+        byId("last-debt").textContent = `İnternet yok — son görülen ${credit ? "avans" : "borç"}: ${text} (${when})`;
+        byId("last-debt").hidden = false;
+      }
+      byId("retry").addEventListener("click", () => location.reload());
+      window.addEventListener("online", () => location.reload());
+    </script>
+  </body>
+</html>
