@@ -1,0 +1,1 @@
+aside.sticky{top:var(--demo-strip-h,0px);height:calc(100vh - var(--demo-strip-h,0px))}
