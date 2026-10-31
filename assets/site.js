@@ -1,7 +1,7 @@
 (() => {
   const I18N = {
     tr: {
-      "nav.products": "Ürünler", "nav.apps": "Mobil uygulamalar", "nav.principles": "İlkeler", "nav.roadmap": "Yol haritası", "nav.contact": "İletişim",
+      "nav.products": "Ürünler", "nav.apps": "Mobil uygulamalar", "nav.principles": "İlkeler", "nav.roadmap": "Yol haritası", "nav.contact": "İletişim", "nav.terms": "Koşullar",
       "hero.eyebrow": "Yazılım stüdyosu", "hero.t1": "İşleri sadeleştiren", "hero.t2": "sağlam yazılımlar.",
       "hero.lead": "Oaraos Software; cebinizdeki küçük uygulamalardan site yönetimine ve perakende muhasebesine kadar, gerçek işleri hızlandıran yazılımlar geliştirir.",
       "hero.cta1": "Ürünleri keşfet", "hero.cta2": "Mobil uygulamalar",
@@ -40,7 +40,7 @@
       "ct.copy": "Adresi kopyala", "ct.copied": "Kopyalandı"
     },
     en: {
-      "nav.products": "Products", "nav.apps": "Mobile apps", "nav.principles": "Principles", "nav.roadmap": "Roadmap", "nav.contact": "Contact",
+      "nav.products": "Products", "nav.apps": "Mobile apps", "nav.principles": "Principles", "nav.roadmap": "Roadmap", "nav.contact": "Contact", "nav.terms": "Terms",
       "hero.eyebrow": "Software studio", "hero.t1": "Solid software that", "hero.t2": "makes work simpler.",
       "hero.lead": "Oaraos Software builds software that speeds up real work, from small apps in your pocket to property management and retail accounting.",
       "hero.cta1": "Explore products", "hero.cta2": "Mobile apps",
