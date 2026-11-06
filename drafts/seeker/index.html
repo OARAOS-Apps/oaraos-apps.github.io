@@ -8,17 +8,18 @@
 <link rel="icon" href="icon-64.png" sizes="64x64" type="image/png">
 <link rel="apple-touch-icon" href="icon-180.png">
 <meta name="robots" content="noindex, nofollow">
-<meta name="description" content="Seeker: perakende ve muhasebe otomasyonu. Depo ve stok sayımı, POS, çek, senet ve kredi, muhasebe ve finans tek programda.">
+<meta name="description" content="Seeker: marketler ve bakkallar için kasa ve stok yazılımı. İnternet kesilse de satan kasa, hareketlerden hesaplanan stok, yazar kasa ve e-Arşiv. Geliştiriliyor.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@100..125,500..800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<link rel="stylesheet" href="kit/kit.css">
 <style>
-/* Layout: light-first product site; one centred 1180px column; petrol green accent with the Oaraos gold only in the footer badge. */
+/* Seeker renkleri — bu blok ürünün kendisine aittir. Ortak tasarım: kit/kit.css (kaynak: products/kit/).
+   İçerik kaynağı: AI-GOVERNANCE/projects/seeker/v2/drafts/WEBSITE_CONTENT.md */
 :root{
   --bg:#F6F6FB; --surface:#FFFFFF; --surface-2:#EEEFF8; --ink:#14132B; --muted:#5D5F7A; --line:#DCDDEE;
   --accent:#3730A3; --accent-2:#7C83FF; --accent-soft:#E6E7FF; --on-accent:#FFFFFF; --warn:#C2410C; --warn-soft:#FDEBDD;
-  --gold:linear-gradient(105deg,#8A6420,#E6C36A 30%,#FFF1BF 48%,#C9993C 66%,#F4D688);
-  --display:"Archivo","Helvetica Neue",Arial,sans-serif; --body:"IBM Plex Sans","Helvetica Neue",Arial,sans-serif; --mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  --phone-bg:#14132B; --phone-line:#2E2F5A; --phone-shadow:rgba(20,19,60,.45);
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
   --bg:#0B0B16; --surface:#12122A; --surface-2:#17183A; --ink:#E8E9FF; --muted:#9A9CC4; --line:#24264A;
@@ -26,143 +27,63 @@
 :root[data-theme="dark"]{
   --bg:#0B0B16; --surface:#12122A; --surface-2:#17183A; --ink:#E8E9FF; --muted:#9A9CC4; --line:#24264A;
   --accent:#7C83FF; --accent-2:#A5AAFF; --accent-soft:#22245A; --on-accent:#0B0B2A; --warn:#FB923C; --warn-soft:#3A2414; color-scheme:dark}
-*{box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{margin:0;background:var(--bg);color:var(--ink);font:400 17px/1.65 var(--body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
-a{color:inherit}
-.col{max-width:1180px;margin:0 auto;padding-left:max(20px, env(safe-area-inset-left, 0px));padding-right:max(20px, env(safe-area-inset-right, 0px))}
-h1,h2,h3{font-family:var(--display);font-stretch:115%;margin:0;text-wrap:balance}
-h2{font-weight:800;font-size:clamp(30px,4.2vw,52px);line-height:1.04;letter-spacing:-.02em}
-h3{font-weight:700;font-size:20px;line-height:1.25}
-.eyebrow{font:500 12.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--accent)}
-.lead{color:var(--muted);font-size:clamp(17px,1.5vw,19px);max-width:58ch;margin:0}
-.band{padding-block:clamp(72px,10vw,130px)}
-.sec-head{display:grid;gap:16px;margin-bottom:clamp(36px,5vw,56px)}
-.proto{background:var(--warn-soft);color:var(--warn);font:500 13px/1.4 var(--mono);text-align:center;padding:8px 16px;padding-top:calc(8px + env(safe-area-inset-top, 0px))}
 
-/* nav */
-nav.top{position:sticky;top:env(safe-area-inset-top, 0px);z-index:20;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
-nav.top .col{display:flex;align-items:center;gap:26px;height:68px}
-.brand{display:flex;align-items:center;gap:10px;text-decoration:none;font:800 22px/1 var(--display);font-stretch:118%;letter-spacing:-.01em}
-.brand svg{width:34px;height:34px}
-.links{display:flex;gap:24px;margin-left:auto}
-.links a{text-decoration:none;color:var(--muted);font-size:15px}
-.links a:hover{color:var(--ink)}
-.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 20px;border-radius:12px;font:600 15px/1 var(--body);text-decoration:none;border:1px solid transparent;cursor:pointer}
-.btn-primary{background:var(--accent);color:var(--on-accent)}
-.btn-primary:hover{filter:brightness(1.08)}
-.btn-ghost{border-color:var(--line);background:var(--surface)}
-.btn-ghost:hover{border-color:var(--accent)}
-.btn:focus-visible,a:focus-visible,button:focus-visible,summary:focus-visible{outline:2px solid var(--accent-2);outline-offset:3px}
-.theme{all:unset;cursor:pointer;width:38px;height:38px;border-radius:10px;border:1px solid var(--line);display:grid;place-items:center;color:var(--muted)}
-.theme svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8}
-@media (max-width:900px){.links{display:none}nav.top .btn{margin-left:auto}}
+/* İmza sahnesi: kasa bağlantısı (çevrimiçi → çevrimdışı → eşitlendi) */
+#kasa b{font-size:clamp(16px,4.2vw,22px);white-space:nowrap;display:flex;align-items:center;gap:8px;transition:color .3s}
+#kasa b::before{content:"";width:10px;height:10px;border-radius:50%;background:var(--accent);flex:none}
+#kasa[data-state="off"] b{color:var(--warn)}
+#kasa[data-state="off"] b::before{background:var(--warn);animation:beatw 1.2s ease-in-out infinite}
+#qbar{transition:width .15s linear!important}
+#kasa[data-state="off"] ~ .kpi #qbar{background:var(--warn)}
+@keyframes beatw{0%,100%{box-shadow:0 0 0 0 var(--warn-soft)}50%{box-shadow:0 0 0 6px var(--warn-soft)}}
 
-/* hero */
-.hero{padding-block:clamp(56px,8vw,96px) 40px;position:relative;overflow:hidden}
-.hero::before{content:"";position:absolute;right:-240px;top:-180px;width:760px;height:760px;border-radius:50%;background:radial-gradient(closest-side,color-mix(in srgb,var(--accent-2) 22%,transparent),transparent);pointer-events:none}
-.hero .col{position:relative;display:grid;grid-template-columns:.95fr 1.05fr;gap:48px;align-items:center}
-.hero h1{font-weight:800;font-size:clamp(42px,6vw,76px);line-height:1;letter-spacing:-.03em}
-.hero h1 span{color:var(--accent)}
-.hero .lead{margin-top:22px}
-.cta{display:flex;gap:12px;flex-wrap:wrap;margin-top:32px}
-.badges{display:flex;gap:18px;flex-wrap:wrap;margin-top:28px;color:var(--muted);font-size:14px}
-.badges span{display:flex;align-items:center;gap:8px}
-.badges i{width:8px;height:8px;border-radius:2px;transform:rotate(45deg);background:var(--accent-2)}
-@media (max-width:980px){.hero .col{grid-template-columns:1fr}}
+/* Bugün ↔ Seeker karşılaştırması */
+.vs{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:start}
+.vs > div{border-radius:22px;padding:clamp(24px,4vw,36px);display:grid;gap:18px;background:var(--surface);min-width:0}
+.vs .rc{display:flex;justify-content:space-between;gap:12px;font:500 12px/1.5 var(--mono);letter-spacing:.08em;text-transform:uppercase;padding-bottom:14px}
+.vs .old{border:1.5px dashed var(--line)}
+.vs .old .rc{color:var(--muted);border-bottom:1.5px dashed var(--line)}
+.vs .new{border:1px solid var(--accent);box-shadow:0 30px 60px -40px var(--phone-shadow)}
+.vs .new .rc{color:var(--accent);border-bottom:1px solid var(--line)}
+.vs ul{margin:0;padding:0;list-style:none;display:grid;gap:14px}
+.vs li{display:grid;grid-template-columns:22px 1fr;gap:10px;color:var(--muted)}
+.vs li::before{font:700 15px/1.6 var(--mono)}
+.vs .old li::before{content:"✕";color:var(--warn)}
+.vs .new li::before{content:"✓";color:var(--accent)}
+.vs .new li{color:var(--ink)}
+@media (max-width:860px){.vs{grid-template-columns:1fr}}
 
-/* dashboard mock */
-.dash{position:relative;background:var(--surface);border:1px solid var(--line);border-radius:22px;box-shadow:0 40px 80px -40px rgba(20,19,60,.45);overflow:hidden;min-width:0}
-.dash-top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line);background:var(--surface-2)}
-.dash-top b{font-weight:600;font-size:15px}
-.dash-top small{font:500 11.5px/1 var(--mono);letter-spacing:.08em;color:var(--muted);text-transform:uppercase}
-.dash-body{padding:18px;display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.kpi{border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;gap:4px;min-width:0}
-.kpi small{color:var(--muted);font-size:12.5px}
-.kpi b{font:800 28px/1.1 var(--display);font-stretch:110%;font-variant-numeric:tabular-nums}
-.kpi .bar{height:6px;border-radius:9px;background:var(--surface-2);overflow:hidden;margin-top:6px}
-.kpi .bar i{display:block;height:100%;width:0;background:var(--accent);border-radius:9px;transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
-.kpi.warn b{color:var(--warn)}
-.chart{grid-column:1/-1;border:1px solid var(--line);border-radius:14px;padding:14px;display:grid;gap:10px}
-.chart small{color:var(--muted);font-size:12.5px}
-.bars{display:grid;grid-template-columns:repeat(12,1fr);gap:6px;align-items:end;height:96px}
-.bars i{display:block;height:0;border-radius:5px 5px 2px 2px;background:var(--accent-soft);transition:height 1.2s cubic-bezier(.2,.8,.2,1)}
-.bars i.now{background:var(--accent)}
-.months{display:grid;grid-template-columns:repeat(12,1fr);gap:6px;font:500 10.5px/1 var(--mono);color:var(--muted);text-align:center}
-.feed{grid-column:1/-1;display:grid;gap:8px;margin:0;padding:0;list-style:none}
-.feed li{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;font-size:13.5px;padding:9px 12px;border-radius:10px;background:var(--surface-2);min-width:0}
-.feed li span:nth-child(2){overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.feed time{font:500 12px/1 var(--mono);color:var(--muted)}
-.dot{width:8px;height:8px;border-radius:50%;background:var(--accent-2)}
-.dot.w{background:var(--warn)}
-.sample{position:absolute;right:14px;bottom:12px;font:500 10.5px/1 var(--mono);color:var(--muted);letter-spacing:.08em}
-.phone{position:absolute;left:-28px;bottom:-26px;width:168px;border-radius:26px;background:#14132B;border:1px solid #2E2F5A;padding:8px;box-shadow:0 30px 60px -20px rgba(0,0,0,.45);display:none}
-.phone div{background:var(--surface);border-radius:20px;padding:14px 12px;display:grid;gap:8px;font-size:12px}
-.phone b{font-size:13px}
-.phone .ok{background:var(--accent-soft);color:var(--accent);border-radius:10px;padding:8px;font-weight:600}
-.phone .note{background:var(--surface-2);border-radius:10px;padding:8px;color:var(--muted)}
-@media (min-width:1100px){.phone{display:block}.feed{padding-left:136px}}
-.dash-wrap{position:relative}
+/* Sözler */
+.pband{background:var(--surface-2);border-block:1px solid var(--line)}
+.prin{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(20px,3vw,36px)}
+.prin div{display:grid;gap:10px;align-content:start}
+.prin i{font:800 15px/1 var(--mono);font-style:normal;color:var(--accent)}
+.prin p{margin:0;color:var(--muted);font-size:15.5px}
+@media (max-width:900px){.prin{grid-template-columns:1fr 1fr}}
+@media (max-width:520px){.prin{grid-template-columns:1fr}}
 
-/* segments strip */
-.strip{border-block:1px solid var(--line);background:var(--surface)}
-.strip .col{display:grid;grid-template-columns:repeat(4,1fr)}
-.strip div{padding:26px 18px;border-left:1px solid var(--line);display:grid;gap:4px}
-.strip div:first-child{border-left:0;padding-left:0}
-.strip b{font:700 17px/1.2 var(--display);font-stretch:110%}
-.strip span{color:var(--muted);font-size:14px}
-@media (max-width:820px){.strip .col{grid-template-columns:1fr 1fr}.strip div:nth-child(3){border-left:0;padding-left:0}.strip div{border-top:1px solid var(--line)}.strip div:nth-child(-n+2){border-top:0}}
+/* Cihazlar */
+.devs{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.dev{border:1px solid var(--line);border-radius:18px;background:var(--surface);padding:22px;display:grid;gap:10px;justify-items:start;align-content:start;min-width:0}
+.dev svg{width:40px;height:40px;stroke:var(--accent);fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+.dev small{color:var(--muted);font-size:14px}
+.tag{justify-self:start;font:500 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;padding:6px 9px;border-radius:99px;background:var(--surface-2);color:var(--muted)}
+@media (max-width:900px){.devs{grid-template-columns:1fr 1fr}}
+@media (max-width:420px){.devs{grid-template-columns:1fr}}
 
-/* modules */
-.mods{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
-.mod{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:26px;display:grid;gap:12px;align-content:start;transition:transform .25s,border-color .25s;min-width:0}
-.mod:hover{transform:translateY(-4px);border-color:var(--accent)}
-.mod .ic{width:46px;height:46px;border-radius:12px;background:var(--accent-soft);display:grid;place-items:center}
-.mod .ic svg{width:24px;height:24px;stroke:var(--accent);fill:none;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
-.mod p{margin:0;color:var(--muted);font-size:15.5px}
-@media (max-width:980px){.mods{grid-template-columns:1fr 1fr}}
-@media (max-width:620px){.mods{grid-template-columns:1fr}}
-
-/* steps */
-.steps{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;counter-reset:s}
-.step{counter-increment:s;padding:28px;border-radius:18px;background:var(--surface-2);display:grid;gap:10px;align-content:start}
-.step::before{content:"0" counter(s);font:800 40px/1 var(--display);color:var(--accent)}
-.step p{margin:0;color:var(--muted);font-size:15.5px}
-@media (max-width:860px){.steps{grid-template-columns:1fr}}
-
-/* web + mobile */
-.split{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-.split > div{border:1px solid var(--line);border-radius:22px;padding:clamp(24px,4vw,40px);background:var(--surface);display:grid;gap:14px;align-content:start}
-.split ul{margin:0;padding:0;list-style:none;display:grid;gap:10px;color:var(--muted)}
-.split li{display:grid;grid-template-columns:18px 1fr;gap:10px}
-.split li::before{content:"";width:8px;height:8px;margin-top:9px;transform:rotate(45deg);background:var(--accent)}
-@media (max-width:860px){.split{grid-template-columns:1fr}}
-
-/* faq */
-.faq{display:grid;gap:10px;max-width:820px}
-.faq details{border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:0 20px}
-.faq summary{cursor:pointer;list-style:none;padding:18px 0;font-weight:600;display:flex;justify-content:space-between;gap:16px}
-.faq summary::after{content:"+";font:500 22px/1 var(--mono);color:var(--accent)}
-.faq details[open] summary::after{content:"–"}
-.faq p{margin:0 0 18px;color:var(--muted)}
-
-/* cta */
-.final{border-radius:28px;padding:clamp(32px,6vw,68px);background:var(--accent);color:var(--on-accent);display:grid;grid-template-columns:1.3fr .7fr;gap:30px;align-items:center}
-.final .lead{color:color-mix(in srgb,var(--on-accent) 80%,transparent)}
-.final code{font:500 18px/1.3 var(--mono);overflow-wrap:anywhere}
-.final .btn{background:var(--on-accent);color:var(--accent)}
-@media (max-width:860px){.final{grid-template-columns:1fr}}
-
-footer{margin-top:clamp(70px,9vw,120px);border-top:1px solid var(--line);padding-block:36px calc(36px + env(safe-area-inset-bottom, 0px))}
-footer .col{display:flex;flex-wrap:wrap;gap:18px 28px;align-items:center;justify-content:space-between;color:var(--muted);font-size:14px}
-.byoaraos{display:inline-flex;align-items:center;gap:12px;padding:10px 16px 10px 12px;border-radius:12px;background:#08080B;color:#EEEAE0;text-decoration:none}
-.byoaraos svg{width:26px;height:26px}
-.byoaraos small{display:block;font:500 10px/1 var(--mono);letter-spacing:.2em;color:#9C978B}
-.byoaraos b{font:800 14px/1.2 var(--display);font-stretch:125%;letter-spacing:.12em;background:var(--gold);-webkit-background-clip:text;background-clip:text;color:transparent}
-
-.js .rv{opacity:0;transform:translateY(22px);transition:opacity .8s cubic-bezier(.2,.8,.2,1),transform .8s cubic-bezier(.2,.8,.2,1)}
-.js .rv.in{opacity:1;transform:none}
-@media (prefers-reduced-motion:reduce){*,*::before,*::after{transition:none!important;animation:none!important}.js .rv{opacity:1;transform:none}html{scroll-behavior:auto}}
+/* Yol haritası */
+.road{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(6,1fr);gap:16px;position:relative}
+.road::before{content:"";position:absolute;left:0;right:0;top:9px;height:2px;background:linear-gradient(90deg,var(--accent) 0 9%,var(--line) 9%)}
+.road li{position:relative;padding-top:40px;display:grid;gap:6px;align-content:start;min-width:0}
+.road li::before{content:"";position:absolute;top:0;left:0;width:20px;height:20px;border-radius:50%;background:var(--surface);border:2px solid var(--line);box-sizing:border-box}
+.road li.now::before{background:var(--accent);border-color:var(--accent);animation:beat 2.4s ease-in-out infinite}
+.road small{font:500 11px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.road li.now small{color:var(--accent)}
+.road b{font:700 17px/1.25 var(--display);font-stretch:110%}
+.road p{margin:0;color:var(--muted);font-size:14.5px}
+@keyframes beat{0%,100%{box-shadow:0 0 0 0 var(--accent-soft)}50%{box-shadow:0 0 0 8px var(--accent-soft)}}
+@media (max-width:900px){.road{grid-template-columns:1fr;gap:24px;padding-left:38px}.road::before{left:9px;right:auto;top:4px;bottom:4px;width:2px;height:auto;background:linear-gradient(180deg,var(--accent) 0 10%,var(--line) 10%)}.road li{padding-top:0}.road li::before{left:-38px;top:2px}}
+@media (prefers-reduced-motion:reduce){.road li.now::before,#kasa b::before{animation:none}}
 </style>
 <script>document.documentElement.classList.add('js')</script>
 </head>
@@ -172,9 +93,9 @@ footer .col{display:flex;flex-wrap:wrap;gap:18px 28px;align-items:center;justify
 <nav class="top" aria-label="Main">
   <div class="col">
     <a class="brand" href="#top"><svg viewBox="0 0 100 100" aria-hidden="true"><defs><linearGradient id="pg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#3730A3"/><stop offset=".5" stop-color="#7C83FF"/><stop offset="1" stop-color="#1E1B4B"/></linearGradient></defs><polygon points="50,8 86.4,29 86.4,71 50,92 13.6,71 13.6,29" fill="none" stroke="url(#pg)" stroke-width="9" stroke-linejoin="round"/><circle cx="46" cy="46" r="15" fill="none" stroke="currentColor" stroke-width="7"/><line x1="57" y1="57" x2="68" y2="68" stroke="#7C83FF" stroke-width="8" stroke-linecap="round"/></svg>Seeker</a>
-    <div class="links"><a href="#moduller">Modüller</a><a href="#nasil">Nasıl çalışır</a><a href="#kimler">Web ve mobil</a><a href="#sss">SSS</a></div>
+    <div class="links"><a href="#fark">Neden Seeker</a><a href="#moduller">Modüller</a><a href="#yol">Yol haritası</a><a href="#sss">SSS</a></div>
     <button class="theme" id="theme" type="button" aria-label="Temayı değiştir"><svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg></button>
-    <a class="btn btn-primary" href="#demo">Demo talep et</a>
+    <a class="btn btn-primary" href="#pilot">Pilot olun</a>
   </div>
 </nav>
 
@@ -182,65 +103,105 @@ footer .col{display:flex;flex-wrap:wrap;gap:18px 28px;align-items:center;justify
   <section class="hero">
     <div class="col">
       <div>
-        <p class="eyebrow rv">Perakende ve muhasebe</p>
-        <h1 class="rv">Depodan kasaya, <span>tek program.</span></h1>
-        <p class="lead rv">Stok sayımı, satış, çek ve senet, muhasebe ve finans aynı veriden beslenir. Mağazada, depoda ve merkezde herkes aynı rakamı görür.</p>
-        <div class="cta rv"><a class="btn btn-primary" href="#demo">Demo talep et</a><a class="btn btn-ghost" href="#moduller">Modülleri incele</a></div>
-        <div class="badges rv"><span><i></i>Web ve masaüstü</span><span><i></i>Mobil sayım</span><span><i></i>Çok şubeli yapı</span></div>
+        <p class="eyebrow rv">Market ve perakende · geliştiriliyor</p>
+        <h1 class="rv">Kasa hiç durmaz, <span>stok yalan söylemez.</span></h1>
+        <p class="lead rv">Kasa internetsiz de satar; bağlantı gelince fişler kayıpsız eşitlenir. Stok her satıştan, fireden ve sayımdan hesaplanır, her farkın nedeni görünür. Verileriniz her zaman sizindir.</p>
+        <div class="cta rv"><a class="btn btn-primary" href="#pilot">Pilot market olun</a><a class="btn btn-ghost" href="#fark">Neden Seeker</a></div>
+        <div class="badges rv"><span><i></i>Çevrimdışı kasa</span><span><i></i>Hareketten stok</span><span><i></i>Verin sizindir</span></div>
       </div>
       <div class="dash-wrap rv">
         <div class="dash" aria-label="Örnek Seeker paneli">
-          <div class="dash-top"><b>Merkez Mağaza · 3 şube</b><small>Bugün</small></div>
+          <div class="dash-top"><b>Merkez Market · 2 şube</b><small>Bugün</small></div>
           <div class="dash-body">
-            <div class="kpi"><small>Bugünkü ciro</small><b data-n="48920" data-pre="₺">₺48.920</b><small>Dün aynı saatte ₺44.310</small></div><div class="kpi warn"><small>Kritik stok</small><b data-n="23">23</b><div class="bar"><i data-w="23" style="background:var(--warn)"></i></div><small>ürün eşiğin altında</small></div><div class="kpi"><small>Vadesi yaklaşan çek</small><b data-n="6">6</b><small>Önümüzdeki 7 gün</small></div><div class="kpi"><small>Stok sayımı</small><b data-n="92" data-suf="%">92%</b><div class="bar"><i data-w="92"></i></div></div>
-            
+            <div class="kpi"><small>Bugünkü ciro</small><b data-n="48920" data-pre="₺">₺48.920</b><small>Dün aynı saatte ₺44.310</small></div><div class="kpi" id="kasa" data-state="on"><small>Kasa 2 · bağlantı</small><b id="netv">Çevrimiçi</b><small id="nets">Fişler anında gidiyor</small></div><div class="kpi"><small>Kuyruktaki fiş</small><b id="q">0</b><div class="bar"><i id="qbar"></i></div><small id="qs">Kayıp: 0</small></div><div class="kpi warn"><small>Nedeni bekleyen fark</small><b data-n="3">3</b><small>ürün · sayım sonrası</small></div>
             <div class="chart"><small>Haftalık satış</small>
               <div class="bars"><i data-h="58"></i><i data-h="64"></i><i data-h="61"></i><i data-h="70"></i><i data-h="66"></i><i data-h="74"></i><i data-h="72"></i><i data-h="80"></i><i data-h="77"></i><i data-h="83"></i><i data-h="79"></i><i class="now" data-h="88"></i></div>
               <div class="months"><span>1</span><span>2</span><span>3</span><span>4</span><span>5</span><span>6</span><span>7</span><span>8</span><span>9</span><span>10</span><span>11</span><span>12</span></div>
             </div>
-            <ul class="feed"><li><i class="dot"></i><span>POS · Fiş 10482 · ₺1.240</span><time>14:32</time></li><li><i class="dot"></i><span>Depo · 48 koli mal girişi</span><time>13:05</time></li><li><i class="dot w"></i><span>Çek · Vade 3 Kasım · ₺25.000</span><time>09:00</time></li></ul>
+            <ul class="feed"><li><i class="dot w"></i><span>Kasa 2 · İnternet kesildi, satış sürüyor</span><time>14:02</time></li><li><i class="dot"></i><span>Kasa 2 · 37 fiş eşitlendi · 0 kayıp</span><time>14:31</time></li><li><i class="dot w"></i><span>Stok · Süt 1 L sayım farkı −1, neden bekleniyor</span><time>15:10</time></li></ul>
           </div>
           <span class="sample">ÖRNEK VERİ</span>
         </div>
-        <div class="phone" aria-hidden="true"><div><b>Sayım modu</b><span class="ok">Raf B-04 · 128 / 140 okutuldu</span><span class="note">Eksik: 12 ürün</span><span class="note">Depo: Ana depo</span></div></div>
+        <div class="phone" aria-hidden="true"><div><b>Süt 1 L · stok 46</b><span class="note">Açılış 60</span><span class="note">Satış −12 · Fire −2</span><span class="ok">Sayım 45 · fark −1</span><span class="note">Neden? fire · kayıp · hata</span></div></div>
       </div>
     </div>
   </section>
 
-  <section class="strip" aria-label="Kimler için"><div class="col"><div><b>Mağazalar</b><span>Tek kasadan başla</span></div><div><b>Zincirler</b><span>Şubeler tek merkezde</span></div><div><b>Toptancılar</b><span>Yüksek hacim, çok depo</span></div><div><b>Muhasebe ekipleri</b><span>Kayıtlar hazır gelir</span></div></div></section>
+  <section class="strip" aria-label="Kimler için"><div class="col"><div><b>Bakkal ve büfe</b><span>Tek kasayla başlayın</span></div><div><b>Marketler</b><span>1–5 şube, tek merkez</span></div><div><b>Muhasebeciler</b><span>Veri düzenli gelir</span></div><div><b>Zincirler</b><span>Sonraki aşamada</span></div></div></section>
+
+  <section class="band" id="fark">
+    <div class="col">
+      <div class="sec-head"><p class="eyebrow rv">Neden Seeker</p><h2 class="rv">Bugünkü düzenin bıraktığı açıklar.</h2><p class="lead rv">Market yazılımlarıyla ilgili kamuya açık şikâyetlerde en sık bunlar geçiyor. Seeker'ı bu boşlukları kapatmak için tasarlıyoruz.</p></div>
+      <div class="vs">
+        <div class="old rv"><div class="rc"><span>Bugün</span><span>Şikâyetlerden</span></div><ul><li>Yazar kasa, POS ya da internet gidince kasa durur, kuyruk büyür.</li><li>Her yıl zorunlu sürüm ücreti, habersiz zam.</li><li>Lisans bitince kendi verinize ulaşamazsınız.</li><li>Sayımda fark çıkar, nedenini kimse bilmez.</li><li>Fatura eşiği, e-Arşiv tarihleri değişir; takibi size kalır.</li></ul></div>
+        <div class="new rv"><div class="rc"><span>Seeker ile</span><span>Planlanan</span></div><ul><li>Kasa internetsiz satar; bağlantı gelince fişler kayıpsız eşitlenir.</li><li>Zorunlu sürüm ücreti yok; yıllık artışa sözleşmede tavan.</li><li>Verilerinizi tek tuşla eksiksiz alırsınız; ayrılsanız da 90 gün okuyabilirsiniz.</li><li>Stok hareketlerden hesaplanır; her fark bir nedene bağlanır.</li><li>Eşik ya da oran değişince Seeker güncellenir.</li></ul></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band pband" id="ilkeler">
+    <div class="col">
+      <div class="sec-head"><p class="eyebrow rv">Sözlerimiz</p><h2 class="rv">Dört söz, ilk sürümden.</h2></div>
+      <div class="prin">
+        <div class="rv"><i>01</i><h3>Kasa hiç durmaz</h3><p>İnternet ya da bulut düşse de satış sürer. Hedefimiz 72 saate kadar bağlantısız çalışmak; pilotta ölçeceğiz.</p></div>
+        <div class="rv"><i>02</i><h3>Stok yalan söylemez</h3><p>Stok elle düzeltilen bir sayı değil; satış, fire, transfer ve sayım hareketlerinden hesaplanır.</p></div>
+        <div class="rv"><i>03</i><h3>Verin sizindir</h3><p>Tek tuşla tam dışa aktarım, iptalden sonra 90 gün okuma erişimi, zorunlu sürüm ücreti yok.</p></div>
+        <div class="rv"><i>04</i><h3>Mevzuat bizde</h3><p>Fatura eşiği, e-Arşiv kuralları ya da oranlar değişince ürün güncellenir; siz fark etmeden uyumlu kalırsınız.</p></div>
+      </div>
+    </div>
+  </section>
 
   <section class="band" id="moduller">
     <div class="col">
-      <div class="sec-head"><p class="eyebrow rv">Modüller</p><h2 class="rv">Perakendenin bütün akışı, birbirine bağlı.</h2><p class="lead rv">Kasada yapılan satış stoktan düşer, tahsilat kasaya ve bankaya işlenir, muhasebe kaydı kendiliğinden oluşur.</p></div>
-      <div class="mods"><article class="mod rv"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 12l9 4 9-4"/><path d="M3 17l9 4 9-4"/></svg></div><h3>Depo ve stok sayımı</h3><p>Depolar arası transfer, kritik stok uyarıları, mobil cihazla hızlı sayım.</p></article><article class="mod rv"><div class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h8M8 15h5"/></svg></div><h3>POS ve satış</h3><p>Kasa satışları, iade ve indirimler; satış anında stok ve kasa güncellenir.</p></article><article class="mod rv"><div class="ic"><svg viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10h6M7 14h3"/><circle cx="16.5" cy="13" r="1.5"/></svg></div><h3>Çek, senet ve kredi</h3><p>Portföydeki çek ve senetler, vadeler, krediler ve ödeme planları.</p></article><article class="mod rv"><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 9v11"/></svg></div><h3>Muhasebe</h3><p>Satış, alış ve banka hareketlerinden otomatik oluşan muhasebe kayıtları.</p></article><article class="mod rv"><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16"/><path d="M8 15l4-4 3 3 5-6"/></svg></div><h3>Finans ve raporlama</h3><p>Nakit akışı, kârlılık ve şube karşılaştırmaları; dönem sonu raporları.</p></article><article class="mod rv"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V9l7-5 7 5v12"/><path d="M9 21v-6h6v6"/></svg></div><h3>Çok şubeli yapı</h3><p>Şubeler, depolar ve kasalar tek merkezden; yetkiye göre görünüm.</p></article></div>
+      <div class="sec-head"><p class="eyebrow rv">Modüller</p><h2 class="rv">Kasa, raf ve depo aynı hesapta.</h2><p class="lead rv">İlk sürümün kapsamını pilot marketlerle birlikte netleştiriyoruz. Planladığımız çekirdek:</p></div>
+      <div class="mods"><article class="mod rv"><div class="ic"><svg viewBox="0 0 24 24"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 7h8M8 11h8M8 15h5"/></svg></div><h3>Kasa</h3><p>Hızlı barkod, iade ve iptal, internetsiz satış; bağlantı gelince fişler kayıpsız eşitlenir.</p></article><article class="mod rv"><div class="ic"><svg viewBox="0 0 24 24"><path d="M20 12l-8 8-9-9V3h8z"/><circle cx="7.5" cy="7.5" r="1.5"/></svg></div><h3>Fiyat ve kampanya</h3><p>Fiyat ve kampanya kasada ve merkezde aynı kurallarla hesaplanır; raf etiketini buradan basarsınız.</p></article><article class="mod rv"><div class="ic"><svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4-9 4-9-4z"/><path d="M3 12l9 4 9-4"/><path d="M3 17l9 4 9-4"/></svg></div><h3>Stok ve sayım</h3><p>Mal kabul, transfer, fire ve son kullanma tarihi; sayım farkı nedeniyle birlikte kaydedilir.</p></article><article class="mod rv"><div class="ic"><svg viewBox="0 0 24 24"><path d="M6 3h9l3 3v15H6z"/><path d="M9 9h6M9 13h6M9 17h3"/></svg></div><h3>Yazar kasa ve e-belge</h3><p>Yeni nesil yazar kasa bağlantısı, e-Arşiv ve e-Fatura; eşik ve oran değişikliklerini biz izleriz.</p></article><article class="mod rv"><div class="ic"><svg viewBox="0 0 24 24"><circle cx="9" cy="8" r="3.5"/><path d="M3 20c.8-3.5 3.3-5.5 6-5.5s5.2 2 6 5.5"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14.8c1.6.7 2.6 2.4 3 5.2"/></svg></div><h3>Cari ve veresiye</h3><p>Müşteri ve tedarikçi hesapları, veresiye defteri ve tahsilatlar.</p></article><article class="mod rv"><div class="ic"><svg viewBox="0 0 24 24"><path d="M4 19V5M4 19h16"/><path d="M8 15l4-4 3 3 5-6"/></svg></div><h3>Raporlar ve muhasebeci</h3><p>Ciro, kâr, fire ve kasa farkı; muhasebecinize düzenli ve temiz veri.</p></article></div>
     </div>
   </section>
 
   <section class="band" id="nasil" style="padding-top:0">
     <div class="col">
-      <div class="sec-head"><p class="eyebrow rv">Nasıl çalışır</p><h2 class="rv">Üç adımda kullanıma hazır.</h2></div>
-      <div class="steps"><div class="step rv"><h3>Ürünleri aktarın</h3><p>Ürün kartlarını, fiyatları ve açılış stoklarını içe aktarın.</p></div><div class="step rv"><h3>Şubeleri ve kasaları tanımlayın</h3><p>Depoları, kasaları ve kullanıcı yetkilerini ayarlayın.</p></div><div class="step rv"><h3>Tek ekrandan izleyin</h3><p>Satış, stok, banka ve muhasebe aynı panelde; raporlar hazır.</p></div></div>
+      <div class="sec-head"><p class="eyebrow rv">Nasıl çalışır</p><h2 class="rv">Geçiş kolay, kurulum kısa.</h2></div>
+      <div class="steps"><div class="step rv"><h3>Ürünlerinizi Excel'le getirin</h3><p>Ürün, fiyat, cari ve açılış stoğunu mevcut programınızdan aktarın; mutabakat raporu neyin geldiğini gösterir.</p></div><div class="step rv"><h3>Kasanızı ve cihazlarınızı bağlayın</h3><p>Barkod okuyucu, terazi, fiş yazıcısı ve yazar kasa. Kurulumu uzaktan ya da yerinde birlikte yapıyoruz.</p></div><div class="step rv"><h3>İlk satışı yapın</h3><p>Hedefimiz: 15 dakikada ilk satış, bir öğleden sonrada tam geçiş.</p></div></div>
     </div>
   </section>
 
-  <section class="band" id="kimler" style="padding-top:0">
+  <section class="band" id="cihazlar" style="padding-top:0">
     <div class="col">
-      <div class="sec-head"><p class="eyebrow rv">Merkez ve saha</p><h2 class="rv">Merkez masada, ekip depoda.</h2></div>
-      <div class="split"><div class="rv"><h3>Web ve masaüstü · yönetim ve muhasebe için</h3><ul><li>Satış, stok ve kasa özetleri</li><li>Çek, senet ve kredi takibi</li><li>Muhasebe kayıtları ve dönem raporları</li><li>Şube ve kullanıcı yetkileri</li></ul></div><div class="rv"><h3>Mobil · depo ve mağaza ekibi için</h3><ul><li>Barkodla stok sayımı</li><li>Mal kabul ve transfer</li><li>Ürün ve fiyat sorgulama</li><li>Anlık satış özeti</li></ul></div></div>
+      <div class="sec-head"><p class="eyebrow rv">Cihazlar</p><h2 class="rv">Elinizdeki donanımla başlayın.</h2><p class="lead rv">Kasa uygulaması eski bir Windows bilgisayarda da çalışacak şekilde tasarlanıyor. Hangi marka ve modellerin çalıştığını test ettikçe burada listeleyeceğiz.</p></div>
+      <div class="devs">
+        <div class="dev rv"><svg viewBox="0 0 40 40"><rect x="5" y="7" width="30" height="20" rx="2"/><path d="M15 33h10M20 27v6"/></svg><h3>Windows bilgisayar</h3><small>Kasa ve merkez paneli</small></div>
+        <div class="dev rv"><svg viewBox="0 0 40 40"><rect x="10" y="4" width="20" height="32" rx="3"/><rect x="14" y="9" width="12" height="9" rx="1"/><path d="M15 23h2M19 23h2M23 23h2M15 27h2M19 27h2M23 27h2"/></svg><h3>Yeni nesil yazar kasa</h3><small><span class="tag">Planlanıyor</span> Android yazar kasada çalışan kasa</small></div>
+        <div class="dev rv"><svg viewBox="0 0 40 40"><path d="M6 10v20M10 10v20M14 10v14M18 10v20M22 10v14M26 10v20M30 10v20M34 10v14"/></svg><h3>Barkod, terazi, yazıcı</h3><small>Okuyucu, tartılı ürün, fiş ve raf etiketi</small></div>
+        <div class="dev rv"><svg viewBox="0 0 40 40"><rect x="12" y="4" width="16" height="32" rx="3"/><path d="M18 31h4"/></svg><h3>Telefon</h3><small>Sayım, mal kabul ve fiyat sorgulama</small></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band" id="yol">
+    <div class="col">
+      <div class="sec-head"><p class="eyebrow rv">Yol haritası</p><h2 class="rv">Marketle başlıyoruz, büyüyoruz.</h2></div>
+      <ol class="road rv">
+        <li class="now"><small>Şu an</small><b>Araştırma</b><p>Marketlerle görüşüyor, teknik riskleri deniyoruz.</p></li>
+        <li><small>Sonra</small><b>Pilot</b><p>İlk 3–5 marketle birlikte çalışıyoruz.</p></li>
+        <li><small>İlk sürüm</small><b>Market ve bakkal</b><p>Kasa, stok, fiyat, yazar kasa ve e-belge.</p></li>
+        <li><small>Genişleme</small><b>Pazaryeri ve hızlı market</b><p>Online kanallarla stok ve sipariş eşitleme.</p></li>
+        <li><small>Genişleme</small><b>Zincirler ve toptan</b><p>Çok şube onayları, toptan satış ve sipariş.</p></li>
+        <li><small>Sektörler</small><b>Sektör paketleri</b><p>Giyim, şarküteri, fırın, elektronik.</p></li>
+      </ol>
     </div>
   </section>
 
   <section class="band" id="sss" style="padding-top:0">
     <div class="col">
       <div class="sec-head"><p class="eyebrow rv">Sık sorulanlar</p><h2 class="rv">Merak edilenler</h2></div>
-      <div class="faq rv"><details><summary>Mevcut programımızdan geçiş yapabilir miyiz?</summary><p>Ürün, cari ve stok listelerinin içe aktarılması kurulumun ilk adımı olarak planlanıyor.</p></details><details><summary>POS cihazlarımızla çalışır mı?</summary><p>Uyumlu cihaz ve yazar kasa seçenekleri demo sırasında paylaşılır.</p></details><details><summary>Birden fazla şubeyi yönetebilir miyiz?</summary><p>Evet. Şubeler, depolar ve kasalar tek merkezden, yetkiye göre yönetilecek şekilde tasarlanıyor.</p></details><details><summary>Fiyatlandırma nasıl?</summary><p>Fiyat, şube ve kullanıcı sayısına ve seçilen modüllere göre belirlenir. Teklif için demo talebinde bulunun.</p></details></div>
+      <div class="faq rv"><details><summary>İnternet kesilirse ne olur?</summary><p>Kasa yerel olarak satmaya devam edecek şekilde tasarlanıyor; bağlantı gelince fişler tekrarsız ve kayıpsız eşitlenir. Hedefimiz 72 saate kadar bağlantısız çalışma; bunu pilotta ölçeceğiz.</p></details><details><summary>Yazar kasamla çalışır mı?</summary><p>Yeni nesil yazar kasalarla bağlantı planlanıyor. Desteklenen marka ve modelleri test ettikçe burada listeleyeceğiz; yazar kasanızın modelini bize yazarsanız önceliklendiririz.</p></details><details><summary>e-Arşiv ve e-Fatura kesebilir miyim?</summary><p>Evet, bir entegratör üzerinden Seeker'dan kesilecek şekilde planlanıyor. Fatura eşiği ve e-Arşiv kuralları değişince ürün güncellenir.</p></details><details><summary>Mevcut programımdan nasıl geçerim?</summary><p>Ürün, fiyat, cari ve stok listelerinizi Excel ile aktarırsınız; mutabakat raporu neyin geldiğini ve neyin eksik kaldığını gösterir.</p></details><details><summary>Verilerim kimin? Ayrılırsam ne olur?</summary><p>Veriler sizindir. Tek tuşla tam dışa aktarım alırsınız; aboneliği bıraksanız da 90 gün boyunca verilerinizi okuyabilirsiniz.</p></details><details><summary>Fiyat ne kadar?</summary><p>Fiyatı pilot sürecinde netleştiriyoruz; şube ve kasa sayısına göre olacak. Zorunlu sürüm ücreti olmayacak.</p></details></div>
     </div>
   </section>
 
-  <section class="col" id="demo">
+  <section class="col" id="pilot">
     <div class="final rv">
-      <div class="sec-head" style="margin:0"><p class="eyebrow" style="color:inherit;opacity:.8">Demo ve pilot</p><h2>İşletmenizde denemek ister misiniz?</h2><p class="lead">Pilot kullanıcı olmak ya da demo almak için yazın; şube sayınızı ve şu an kullandığınız programı kısaca anlatın.</p></div>
-      <div style="display:grid;gap:14px;justify-items:start"><code>oaraos.support@gmail.com</code><a class="btn" href="mailto:oaraos.support@gmail.com?subject=Seeker%20demo">E-posta gönder</a></div>
+      <div class="sec-head" style="margin:0"><p class="eyebrow" style="color:inherit;opacity:.8">Pilot program</p><h2>Pilot market olmak ister misiniz?</h2><p class="lead">Şube ve kasa sayınızı, kullandığınız programı ve yazar kasa modelinizi kısaca yazın. İlk marketlerle kurulumu birlikte yapacak, ürünü onların günlük işine göre şekillendireceğiz.</p></div>
+      <div style="display:grid;gap:14px;justify-items:start"><code>oaraos.support@gmail.com</code><a class="btn" href="mailto:oaraos.support@gmail.com?subject=Seeker%20pilot">E-posta gönder</a></div>
     </div>
   </section>
 </main>
@@ -255,31 +216,33 @@ footer .col{display:flex;flex-wrap:wrap;gap:18px 28px;align-items:center;justify
   </div>
 </footer>
 
+<script src="kit/kit.js" data-product="seeker"></script>
 <script>
+/* Seeker imza sahnesi: kasa internetsiz satar, bağlantı gelince kayıpsız eşitlenir (ÖRNEK VERİ). */
 (() => {
-  const root = document.documentElement;
-  const saved = (() => { try { return localStorage.getItem("seeker-theme") } catch (e) { return null } })();
-  if (saved) root.dataset.theme = saved;
-  document.getElementById("theme").addEventListener("click", () => {
-    const dark = root.dataset.theme ? root.dataset.theme === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
-    root.dataset.theme = dark ? "light" : "dark";
-    try { localStorage.setItem("seeker-theme", root.dataset.theme) } catch (e) {}
-  });
-  const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); } }), { rootMargin: "0px 0px -8% 0px" });
-  document.querySelectorAll(".rv").forEach((el, i) => { el.style.transitionDelay = (i % 3) * 80 + "ms"; io.observe(el); });
-  const dash = document.querySelector(".dash");
-  const play = () => {
-    dash.querySelectorAll("[data-w]").forEach(i => i.style.width = i.dataset.w + "%");
-    dash.querySelectorAll("[data-h]").forEach(i => i.style.height = i.dataset.h + "%");
-    if (reduce) return;
-    dash.querySelectorAll("[data-n]").forEach(el => {
-      const end = +el.dataset.n, suf = el.dataset.suf || "", pre = el.dataset.pre || "", t0 = performance.now();
-      const tick = t => { const p = Math.min(1, (t - t0) / 1300); el.textContent = pre + Math.round(end * (1 - Math.pow(1 - p, 3))).toLocaleString("tr-TR") + suf; if (p < 1) requestAnimationFrame(tick); };
-      requestAnimationFrame(tick);
-    });
+  const card = document.getElementById("kasa"), v = document.getElementById("netv"), s = document.getElementById("nets");
+  const q = document.getElementById("q"), qs = document.getElementById("qs"), bar = document.getElementById("qbar");
+  if (!card) return;
+  const N = 37;
+  const set = (state, text, sub) => { card.dataset.state = state; v.textContent = text; s.textContent = sub; };
+  const show = n => { q.textContent = n; bar.style.width = (n / N * 100) + "%"; };
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) { set("sync", "Eşitlendi", N + " fiş · 0 kayıp"); show(0); return; }
+  let timers = [], loops = [];
+  const clear = () => { timers.forEach(clearTimeout); loops.forEach(clearInterval); timers = []; loops = []; };
+  const run = () => {
+    clear();
+    set("on", "Çevrimiçi", "Fişler anında gidiyor"); show(0); qs.textContent = "Kayıp: 0";
+    timers.push(setTimeout(() => {
+      set("off", "Çevrimdışı", "Satış sürüyor"); let n = 0;
+      loops.push(setInterval(() => { n = Math.min(N, n + 1); show(n); if (n >= N) clearInterval(loops[0]); }, 110));
+    }, 2500));
+    timers.push(setTimeout(() => {
+      clear(); set("sync", "Eşitleniyor", "Fişler gönderiliyor"); let n = N;
+      loops.push(setInterval(() => { n = Math.max(0, n - 1); show(n); if (n <= 0) { clearInterval(loops[0]); set("sync", "Eşitlendi", N + " fiş · 0 kayıp"); } }, 45));
+      timers.push(setTimeout(run, 6000));
+    }, 8000));
   };
-  new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { play(); o.disconnect(); } }, { threshold: .3 }).observe(dash);
+  new IntersectionObserver((es, o) => { if (es[0].isIntersecting) { run(); o.disconnect(); } }, { threshold: .3 }).observe(card);
 })();
 </script>
 </body>
