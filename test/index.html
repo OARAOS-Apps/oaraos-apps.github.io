@@ -65,7 +65,9 @@ footer{display:grid;gap:8px;font-size:14px;color:var(--muted);border-top:1px sol
 .mail code{font:500 14px/1 ui-monospace,SFMono-Regular,Menlo,monospace;color:var(--ink);background:var(--card);border:1px solid var(--line);padding:6px 8px;border-radius:8px;user-select:all}
 .copy{all:unset;cursor:pointer;font-size:13px;font-weight:600;color:var(--accent)}
 @media (max-width:520px){.meter{flex-basis:100%}}
-@media (prefers-reduced-motion:reduce){.meter i{transition:none}}
+@keyframes just{from{box-shadow:0 0 0 0 var(--done)}to{box-shadow:0 0 0 12px transparent}}
+.app.just{animation:just .9s ease-out 2}
+@media (prefers-reduced-motion:reduce){.meter i{transition:none}.app.just{animation:none}}
 </style>
 
 </head>
@@ -119,7 +121,7 @@ const T={
   s2:"Her uygulamada “Teste katıl”",s2d:"Aşağıdaki düğmeye bas, açılan sayfada “Test kullanıcısı ol”a dokun, sonra Google Play'den yükle.",
   s3:"14 gün silme",s3d:"Uygulamaları 14 gün telefonunda tut, 2–3 günde bir kısaca açıp kullan.",
   s4:"Sorun görürsen yaz",s4d:"Uygulamada Ayarlar → Destek bölümünden bildir. Ekran görüntüsü çok işe yarar.",
-  note:"Yalnızca Android telefonlar sayılıyor. Bir bağlantı “uygulama mevcut değil” derse o uygulamanın testi henüz açılmamıştır, birkaç gün sonra tekrar dene. İşaretlediklerin yalnızca bu tarayıcıda saklanır.",
+  note:"Yalnızca Android telefonlar sayılıyor. Bir bağlantı “uygulama mevcut değil” derse o uygulamanın testi henüz açılmamıştır, birkaç gün sonra tekrar dene. “Teste katıl”a basıp bu sayfaya döndüğünde o uygulama kendiliğinden işaretlenir; katılamadıysan işareti kaldır. İşaretler yalnızca bu tarayıcıda saklanır.",
   listTitle:"Uygulamalar",join:"Teste katıl",tick:"Katıldım",
   privacy:"Uygulamalar hesap istemez, reklam göstermez ve verilerin telefonundan çıkmaz.",
   contact:"İletişim:",copy:"Kopyala",copied:"Kopyalandı"},
@@ -130,14 +132,14 @@ const T={
   s2:"Tap “Join test” for each app",s2d:"Tap the button below, then “Become a tester” on the page that opens, then install from Google Play.",
   s3:"Keep them for 14 days",s3d:"Don't uninstall for 14 days; open each app briefly every 2–3 days.",
   s4:"Report anything odd",s4d:"In the app, go to Settings → Support. A screenshot helps a lot.",
-  note:"Only Android phones count. If a link says the app isn't available, its test hasn't opened yet; try again in a few days. Your ticks are saved only in this browser.",
+  note:"Only Android phones count. If a link says the app isn't available, its test hasn't opened yet; try again in a few days. When you tap “Join test” and come back to this page, that app is ticked for you; untick it if joining didn't work. Ticks are saved only in this browser.",
   listTitle:"The apps",join:"Join test",tick:"Joined",
   privacy:"The apps need no account, show no ads, and your data never leaves your phone.",
   contact:"Contact:",copy:"Copy",copied:"Copied"}
 };
-let lang=(navigator.language||"tr").slice(0,2)==="tr"?"tr":"en", done={};
-try{const s=JSON.parse(localStorage.getItem("oaraos-tester")||"{}");if(s.lang)lang=s.lang;if(s.done)done=s.done}catch(e){}
-function save(){try{localStorage.setItem("oaraos-tester",JSON.stringify({lang,done}))}catch(e){}}
+let lang=(navigator.language||"tr").slice(0,2)==="tr"?"tr":"en", done={}, opened={};
+try{const s=JSON.parse(localStorage.getItem("oaraos-tester")||"{}");if(s.lang)lang=s.lang;if(s.done)done=s.done;if(s.opened)opened=s.opened}catch(e){}
+function save(){try{localStorage.setItem("oaraos-tester",JSON.stringify({lang,done,opened}))}catch(e){}}
 const grid=document.getElementById("grid");
 function render(){
   const t=T[lang];document.documentElement.lang=lang;
@@ -146,13 +148,14 @@ function render(){
   document.getElementById("l-en").setAttribute("aria-pressed",lang==="en");
   grid.innerHTML="";
   APPS.forEach((a,i)=>{
-    const card=document.createElement("article");card.className="app"+(done[a.pkg]?" done":"");
+    const card=document.createElement("article");card.className="app"+(done[a.pkg]?" done":"");card.dataset.pkg=a.pkg;
     card.innerHTML=`<img alt="" src="${a.icon}"><div style="min-width:0"><h3></h3><p></p></div>
       <div class="actions"><a class="join" target="_blank" rel="noopener" href="https://play.google.com/apps/testing/${a.pkg}"></a>
       <label class="tick"><input type="checkbox" id="t-${i}"><span></span></label></div>`;
     card.querySelector("h3").textContent=lang==="tr"?a.tr_name:a.en_name;
     card.querySelector("p").textContent=lang==="tr"?a.tr_short:a.en_short;
     card.querySelector(".join").textContent=t.join+" ↗";
+    card.querySelector(".join").addEventListener("click",()=>{opened[a.pkg]=1;save()});
     card.querySelector(".tick span").textContent=t.tick;
     const cb=card.querySelector("input");cb.checked=!!done[a.pkg];
     cb.addEventListener("change",()=>{done[a.pkg]=cb.checked;if(!cb.checked)delete done[a.pkg];card.classList.toggle("done",cb.checked);save();progress()});
@@ -168,7 +171,20 @@ document.getElementById("l-en").onclick=()=>{lang="en";save();render()};
 document.getElementById("copy").onclick=async e=>{const b=e.currentTarget;
   try{await navigator.clipboard.writeText("oaraos.support@gmail.com");b.textContent=T[lang].copied}
   catch(err){const r=document.createRange();r.selectNodeContents(document.getElementById("mail"));const s=getSelection();s.removeAllRanges();s.addRange(r)}};
-render();
+// Back from Google Play: tick the apps whose join link was tapped, then show the next one.
+function settle(){
+  const pkgs=Object.keys(opened);if(!pkgs.length)return;
+  pkgs.forEach(p=>{done[p]=true;delete opened[p]});save();
+  pkgs.forEach(p=>{const card=grid.querySelector(`[data-pkg="${p}"]`);if(!card)return;
+    card.classList.add("done","just");card.querySelector("input").checked=true;
+    setTimeout(()=>card.classList.remove("just"),1900)});
+  progress();
+  const next=grid.querySelector(".app:not(.done)");
+  if(next)next.scrollIntoView({block:"center",behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
+}
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)settle()});
+window.addEventListener("pageshow",settle);
+render();settle();
 </script>
 
 </body>
